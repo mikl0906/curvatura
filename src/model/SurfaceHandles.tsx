@@ -36,7 +36,7 @@ function SurfaceHandle({
 
   return (
     <mesh position={position} onPointerOver={onOver} onPointerOut={onOut}>
-      <sphereGeometry args={[0.03, 20, 20]} />
+      <sphereGeometry args={[0.01, 20, 20]} />
       <meshStandardMaterial
         color={highlighted ? "#ffffff" : color}
         emissive={color}

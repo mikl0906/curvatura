@@ -34,6 +34,7 @@ const PRESETS: { name: PresetName; label: string }[] = [
   { name: "dome", label: "Dome" },
   { name: "saddle", label: "Saddle" },
   { name: "ripple", label: "Ripple" },
+  { name: "stadium", label: "Stadium" },
 ];
 
 function CopyButton({

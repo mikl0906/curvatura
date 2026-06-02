@@ -18,29 +18,51 @@ function makeGrid(n: number, f: (u: number, v: number) => number): Grid {
   return grid;
 }
 
-// Base coordinate fields: x ramps along u, y ramps along v (a flat sheet in the
-// XY plane). Presets vary only z so the starting surface stays recognizable.
-const rampU = (u: number) => u * 2 - 1;
-const rampV = (_u: number, v: number) => v * 2 - 1;
+// A preset defines all three coordinate fields. Most are a flat sheet in the XY
+// plane (x ramps along u, y ramps along v) varying only z, so the starting
+// surface stays recognizable; `stadium` instead reshapes the XY footprint.
+type CoordFn = (u: number, v: number) => number;
+type PresetFns = { x: CoordFn; y: CoordFn; z: CoordFn };
 
-const PRESET_Z: Record<PresetName, (u: number, v: number) => number> = {
-  flat: () => 0,
-  dome: (u, v) => {
-    const r2 = (u * 2 - 1) ** 2 + (v * 2 - 1) ** 2;
-    return Math.max(0, 1 - r2);
+const rampU: CoordFn = (u) => u * 2 - 1;
+const rampV: CoordFn = (_u, v) => v * 2 - 1;
+const zero: CoordFn = () => 0;
+const sheetXY = { x: rampU, y: rampV };
+
+const PRESET_FNS: Record<PresetName, PresetFns> = {
+  flat: { ...sheetXY, z: zero },
+  dome: {
+    ...sheetXY,
+    z: (u, v) => {
+      const r2 = (u * 2 - 1) ** 2 + (v * 2 - 1) ** 2;
+      return Math.max(0, 1 - r2);
+    },
   },
-  saddle: (u, v) => 0.8 * ((u * 2 - 1) ** 2 - (v * 2 - 1) ** 2),
-  ripple: (u, v) => {
-    const r = Math.hypot(u * 2 - 1, v * 2 - 1);
-    return 0.35 * Math.cos(r * Math.PI * 2.5);
+  saddle: {
+    ...sheetXY,
+    z: (u, v) => 0.8 * ((u * 2 - 1) ** 2 - (v * 2 - 1) ** 2),
+  },
+  ripple: {
+    ...sheetXY,
+    z: (u, v) => {
+      const r = Math.hypot(u * 2 - 1, v * 2 - 1);
+      return 0.35 * Math.cos(r * Math.PI * 2.5);
+    },
+  },
+  stadium: {
+    x: (u, v) => Math.sin(2 * Math.PI * (u - 0.5)) * Math.cos(1.5 * v - 0.5),
+    y: (u, v) => -Math.cos(2 * Math.PI * (u - 0.5)) * Math.cos(1.5 * v - 0.5),
+    z: (u, v) =>
+      0.6 * Math.sin(2 * v) + v * 0.1 * Math.cos(4 * Math.PI * (u - 0.5)),
   },
 };
 
 function buildAxes(n: number, preset: PresetName): Axes {
+  const fns = PRESET_FNS[preset];
   return {
-    x: makeGrid(n, (u) => rampU(u)),
-    y: makeGrid(n, rampV),
-    z: makeGrid(n, PRESET_Z[preset]),
+    x: makeGrid(n, fns.x),
+    y: makeGrid(n, fns.y),
+    z: makeGrid(n, fns.z),
   };
 }
 

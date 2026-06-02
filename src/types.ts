@@ -17,7 +17,7 @@ export type Axis = "x" | "y" | "z";
 export type Axes = Record<Axis, Grid>;
 
 /** Built-in starting surfaces. */
-export type PresetName = "flat" | "dome" | "saddle" | "ripple";
+export type PresetName = "flat" | "dome" | "saddle" | "ripple" | "stadium";
 
 /** The grid cell currently highlighted, shared across every canvas. */
 export type HoveredCell = { i: number; j: number };
