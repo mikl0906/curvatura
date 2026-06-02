@@ -1,6 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import { Grid, OrbitControls } from "@react-three/drei";
-import { useSurfaceStore } from "@/surfaceStore";
+import { useSurfaceStore } from "@/surface-store";
 import { SurfaceMesh } from "./SurfaceMesh";
 
 /** The assembled parametric surface (x(u,v), y(u,v), z(u,v)). Read-only. */

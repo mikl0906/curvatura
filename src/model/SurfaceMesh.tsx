@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { useEffect, useMemo } from "react";
-import type { Axes } from "@/surfaceStore";
+import type { Axes } from "@/surface-store";
 import { makeEvaluator } from "@/interpolation";
 import { buildSurfaceGeometry } from "@/geometry";
 

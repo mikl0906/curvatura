@@ -1,7 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { Grid, OrbitControls } from "@react-three/drei";
-import type { Axis } from "@/surfaceStore";
-import { useSurfaceStore } from "@/surfaceStore";
+import type { Axis } from "@/surface-store";
+import { useSurfaceStore } from "@/surface-store";
 import { HeightFieldMesh } from "./HeightFieldMesh";
 import { Handle } from "./Handle";
 

@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { DragControls } from "@react-three/drei";
-import type { Axis } from "@/surfaceStore";
-import { useSurfaceStore } from "@/surfaceStore";
+import type { Axis } from "@/surface-store";
+import { useSurfaceStore } from "@/surface-store";
 
 const VALUE_LIMIT = 3;
 const clamp = (x: number, min: number, max: number) =>
