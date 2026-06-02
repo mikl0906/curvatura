@@ -6,7 +6,7 @@
  * runnable with zero dependencies. This is the app's only output affordance.
  */
 
-import type { Grid } from "./interpolation";
+import type { Grid } from "./types";
 
 /** Inlined helpers shared by every emitted lambda (matches interpolation.ts). */
 const HELPERS =

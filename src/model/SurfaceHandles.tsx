@@ -1,5 +1,5 @@
 import type { ThreeEvent } from "@react-three/fiber";
-import type { Axes } from "@/surface-store";
+import type { Axes } from "@/types";
 import { useSurfaceStore } from "@/surface-store";
 
 type SurfaceHandlesProps = {

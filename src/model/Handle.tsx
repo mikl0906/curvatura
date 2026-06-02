@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import { DragControls } from "@react-three/drei";
-import type { Axis } from "@/surface-store";
+import { DragControls, Html } from "@react-three/drei";
+import type { Axis } from "@/types";
 import { useSurfaceStore } from "@/surface-store";
 
 const VALUE_LIMIT = 3;
@@ -60,6 +60,13 @@ export function Handle({ axis, i, j, position, color }: HandleProps) {
           emissive={color}
           emissiveIntensity={highlighted || dragging ? 0.7 : 0.2}
         />
+        {(highlighted || dragging) && (
+          <Html center position={[0, 0, 0.15]} className="pointer-events-none">
+            <div className="rounded-md border border-border bg-popover p-1 py-0.5 text-xs font-medium tabular-nums text-popover-foreground shadow-sm">
+              {position[2].toFixed(2)}
+            </div>
+          </Html>
+        )}
       </mesh>
     </DragControls>
   );

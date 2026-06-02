@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { useEffect, useMemo } from "react";
-import type { Grid } from "@/interpolation";
+import type { Grid } from "@/types";
 import { makeEvaluator } from "@/interpolation";
 import { buildSurfaceGeometry } from "@/geometry";
 

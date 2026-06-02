@@ -11,10 +11,10 @@
  * export, so it is kept dependency-free and trivially serializable.
  */
 
-export type Grid = number[][];
+import type { Grid } from "@/types";
 
 /** 1D Catmull-Rom basis through p1..p2, with neighbours p0 and p3. */
-export function catmullRom(
+function catmullRom(
   p0: number,
   p1: number,
   p2: number,
@@ -33,7 +33,7 @@ export function catmullRom(
 }
 
 /** Sample a 1D array of values at `x ∈ [0, 1]` with edge clamping. */
-export function sampleArray1D(values: number[], x: number): number {
+function sampleArray1D(values: number[], x: number): number {
   const n = values.length;
   if (n === 0) return 0;
   if (n === 1) return values[0];
@@ -50,7 +50,7 @@ export function sampleArray1D(values: number[], x: number): number {
  * Bicubic sample of a grid at `(u, v) ∈ [0, 1]²`.
  * `grid[i]` is a row spanning v; `i` indexes u.
  */
-export function sampleBicubic(grid: Grid, u: number, v: number): number {
+function sampleBicubic(grid: Grid, u: number, v: number): number {
   if (grid.length === 0) return 0;
   const colSamples = grid.map((row) => sampleArray1D(row, v));
   return sampleArray1D(colSamples, u);

@@ -4,7 +4,7 @@ import { Check, Copy, Moon, RotateCcw, Shapes, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/theme-provider";
-import type { PresetName } from "@/surface-store";
+import type { PresetName } from "@/types";
 import { useSurfaceStore } from "@/surface-store";
 import { gridToLambdaString, surfaceToLambdaString } from "@/lambda-export";
 import { ControlCanvas } from "./model/ControlCanvas";

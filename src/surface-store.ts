@@ -1,10 +1,6 @@
 import { create } from "zustand";
-import type { Grid } from "@/interpolation";
+import type { Axes, Grid, PresetName, SurfaceState } from "@/types";
 import { makeEvaluator } from "@/interpolation";
-
-export type Axis = "x" | "y" | "z";
-export type Axes = Record<Axis, Grid>;
-export type PresetName = "flat" | "dome" | "saddle" | "ripple";
 
 /** Build an `n×n` grid by sampling `f(u, v)` with `u, v ∈ [0, 1]`. */
 function makeGrid(n: number, f: (u: number, v: number) => number): Grid {
@@ -48,29 +44,13 @@ function buildAxes(n: number, preset: PresetName): Axes {
 }
 
 const DEFAULT_RESOLUTION = 5;
-const DEFAULT_MESH_SAMPLES = 48;
+const DEFAULT_MESH_SAMPLES = 32;
 
 /** Resample a grid to a new resolution, preserving its interpolated shape. */
 function resampleGrid(grid: Grid, n: number): Grid {
   const evaluate = makeEvaluator(grid);
   return makeGrid(n, evaluate);
 }
-
-/** The grid cell currently highlighted, shared across every canvas. */
-export type HoveredCell = { i: number; j: number };
-
-type SurfaceState = {
-  axes: Axes;
-  resolution: number;
-  meshSamples: number;
-  hovered: HoveredCell | null;
-  setHandle: (axis: Axis, i: number, j: number, value: number) => void;
-  setResolution: (n: number) => void;
-  setMeshSamples: (n: number) => void;
-  setHovered: (cell: HoveredCell | null) => void;
-  reset: () => void;
-  loadPreset: (name: PresetName) => void;
-};
 
 export const useSurfaceStore = create<SurfaceState>((set) => ({
   axes: buildAxes(DEFAULT_RESOLUTION, "flat"),

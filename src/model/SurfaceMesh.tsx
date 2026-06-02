@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { useEffect, useMemo } from "react";
-import type { Axes } from "@/surface-store";
+import type { Axes } from "@/types";
 import { makeEvaluator } from "@/interpolation";
 import { buildSurfaceGeometry } from "@/geometry";
 
@@ -35,7 +35,7 @@ export function SurfaceMesh({ axes, samples }: SurfaceMeshProps) {
         roughness={0.45}
         metalness={0.1}
         flatShading={false}
-        wireframe={true}
+        // wireframe={true}
       />
     </mesh>
   );
