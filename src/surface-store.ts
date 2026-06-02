@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import type { Axes, Grid, PresetName, SurfaceState } from "@/types";
+import { persist } from "zustand/middleware";
+import type { Axes, Grid, PresetName, SurfaceStore } from "@/types";
 import { makeEvaluator } from "@/interpolation";
 
 /** Build an `n×n` grid by sampling `f(u, v)` with `u, v ∈ [0, 1]`. */
@@ -52,36 +53,45 @@ function resampleGrid(grid: Grid, n: number): Grid {
   return makeGrid(n, evaluate);
 }
 
-export const useSurfaceStore = create<SurfaceState>((set) => ({
-  axes: buildAxes(DEFAULT_RESOLUTION, "flat"),
-  resolution: DEFAULT_RESOLUTION,
-  meshSamples: DEFAULT_MESH_SAMPLES,
-  hovered: null,
+export const useSurfaceStore = create<SurfaceStore>()(
+  persist(
+    (set) => ({
+      axes: buildAxes(DEFAULT_RESOLUTION, "flat"),
+      resolution: DEFAULT_RESOLUTION,
+      meshSamples: DEFAULT_MESH_SAMPLES,
+      hovered: null,
 
-  setHandle: (axis, i, j, value) =>
-    set((state) => {
-      const next = state.axes[axis].map((row, ri) =>
-        ri === i ? row.map((v, ci) => (ci === j ? value : v)) : row,
-      );
-      return { axes: { ...state.axes, [axis]: next } };
+      setHandle: (axis, i, j, value) =>
+        set((state) => {
+          const next = state.axes[axis].map((row, ri) =>
+            ri === i ? row.map((v, ci) => (ci === j ? value : v)) : row,
+          );
+          return { axes: { ...state.axes, [axis]: next } };
+        }),
+
+      setResolution: (n) =>
+        set((state) => ({
+          resolution: n,
+          axes: {
+            x: resampleGrid(state.axes.x, n),
+            y: resampleGrid(state.axes.y, n),
+            z: resampleGrid(state.axes.z, n),
+          },
+        })),
+
+      setMeshSamples: (n) => set({ meshSamples: n }),
+
+      setHovered: (cell) => set({ hovered: cell }),
+
+      reset: () =>
+        set((state) => ({ axes: buildAxes(state.resolution, "flat") })),
+
+      loadPreset: (name) =>
+        set((state) => ({ axes: buildAxes(state.resolution, name) })),
     }),
-
-  setResolution: (n) =>
-    set((state) => ({
-      resolution: n,
-      axes: {
-        x: resampleGrid(state.axes.x, n),
-        y: resampleGrid(state.axes.y, n),
-        z: resampleGrid(state.axes.z, n),
-      },
-    })),
-
-  setMeshSamples: (n) => set({ meshSamples: n }),
-
-  setHovered: (cell) => set({ hovered: cell }),
-
-  reset: () => set((state) => ({ axes: buildAxes(state.resolution, "flat") })),
-
-  loadPreset: (name) =>
-    set((state) => ({ axes: buildAxes(state.resolution, name) })),
-}));
+    {
+      name: "surface",
+      version: 1,
+    },
+  ),
+);

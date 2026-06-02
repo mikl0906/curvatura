@@ -4,8 +4,10 @@ import type { Axis } from "@/types";
 import { useSurfaceStore } from "@/surface-store";
 
 const VALUE_LIMIT = 3;
+const SNAP_STEP = 0.01;
 const clamp = (x: number, min: number, max: number) =>
   Math.min(Math.max(x, min), max);
+const snap = (x: number) => Math.round(x / SNAP_STEP) * SNAP_STEP;
 
 type HandleProps = {
   axis: Axis;
@@ -48,7 +50,7 @@ export function Handle({ axis, i, j, position, color }: HandleProps) {
           axis,
           i,
           j,
-          clamp(startValue.current + dz, -VALUE_LIMIT, VALUE_LIMIT),
+          clamp(snap(startValue.current + dz), -VALUE_LIMIT, VALUE_LIMIT),
         );
       }}
       onDragEnd={() => setDragging(false)}

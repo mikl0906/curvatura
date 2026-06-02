@@ -23,7 +23,7 @@ export type PresetName = "flat" | "dome" | "saddle" | "ripple";
 export type HoveredCell = { i: number; j: number };
 
 /** Zustand store: the single source of truth for the three grids and settings. */
-export type SurfaceState = {
+export type SurfaceStore = {
   axes: Axes;
   resolution: number; // Number of handles in grid row
   meshSamples: number; // Density of the final mesh
