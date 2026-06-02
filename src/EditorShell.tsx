@@ -18,6 +18,7 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from "./components/ui/popover";
+import GithubIcon from "./components/Github";
 
 // App-wide convention: Z is up on every canvas.
 THREE.Object3D.DEFAULT_UP.set(0, 0, 1);
@@ -53,7 +54,7 @@ function CopyButton({
     }
   };
   return (
-    <Button variant="outline" onClick={onClick}>
+    <Button variant="outline" size="sm" onClick={onClick}>
       {copied ? <Check /> : <Copy />}
       {copied ? "Copied!" : children}
     </Button>
@@ -73,8 +74,8 @@ function Panel({
 }) {
   return (
     <div className="relative flex flex-col overflow-hidden bg-background">
-      <div className="flex shrink-0 items-center justify-between border-b p-2 h-12">
-        <span className="flex items-center gap-2 font-medium">
+      <div className="flex shrink-0 items-center justify-between border-b p-2 h-10">
+        <span className="flex items-center gap-2 font-medium text-sm">
           {color && (
             <span
               className="size-2.5 rounded-full"
@@ -99,7 +100,7 @@ function ThemeToggle() {
   return (
     <Button
       variant="outline"
-      size="icon"
+      size="icon-sm"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label="Toggle theme"
     >
@@ -126,7 +127,7 @@ export function EditorShell() {
           </span>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={reset}>
+            <Button variant="outline" size="sm" onClick={reset}>
               <RotateCcw />
               Reset
             </Button>
@@ -137,24 +138,24 @@ export function EditorShell() {
               Copy all
             </CopyButton>
 
-            <label className="hidden items-center gap-2 text-muted-foreground lg:flex">
+            <label className="hidden text-sm items-center gap-2 text-muted-foreground lg:flex">
               Handles
               <Slider
                 min={3}
-                max={9}
+                max={15}
                 step={1}
                 value={[resolution]}
                 onValueChange={(value) => setResolution(value[0])}
                 className="w-32"
               />
-              <span className="w-8 tabular-nums">
+              <span className="w-8">
                 {resolution}×{resolution}
               </span>
             </label>
 
             <Popover open={presetsOpen} onOpenChange={setPresetsOpen}>
               <PopoverTrigger asChild>
-                <Button variant="outline">
+                <Button variant="outline" size="sm">
                   <Shapes />
                   Presets
                 </Button>
@@ -186,7 +187,16 @@ export function EditorShell() {
           </div>
         </div>
 
-        <div>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="icon-sm" asChild aria-label="GitHub">
+            <a
+              href="https://github.com/mikl0906/curvatura"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <GithubIcon />
+            </a>
+          </Button>
           <ThemeToggle />
         </div>
       </header>

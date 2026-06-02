@@ -8,6 +8,7 @@ import {
 } from "@react-three/drei";
 import { useSurfaceStore } from "@/surface-store";
 import { SurfaceMesh } from "./SurfaceMesh";
+import { SurfaceHandles } from "./SurfaceHandles";
 
 /** The assembled parametric surface (x(u,v), y(u,v), z(u,v)). Read-only. */
 export function ResultCanvas() {
@@ -31,6 +32,7 @@ export function ResultCanvas() {
       />
       <axesHelper args={[0.5]} />
       <SurfaceMesh axes={axes} samples={samples} />
+      <SurfaceHandles axes={axes} />
       <OrthographicCamera
         makeDefault
         zoom={100}

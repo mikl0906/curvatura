@@ -56,13 +56,18 @@ function resampleGrid(grid: Grid, n: number): Grid {
   return makeGrid(n, evaluate);
 }
 
+/** The grid cell currently highlighted, shared across every canvas. */
+export type HoveredCell = { i: number; j: number };
+
 type SurfaceState = {
   axes: Axes;
   resolution: number;
   meshSamples: number;
+  hovered: HoveredCell | null;
   setHandle: (axis: Axis, i: number, j: number, value: number) => void;
   setResolution: (n: number) => void;
   setMeshSamples: (n: number) => void;
+  setHovered: (cell: HoveredCell | null) => void;
   reset: () => void;
   loadPreset: (name: PresetName) => void;
 };
@@ -71,6 +76,7 @@ export const useSurfaceStore = create<SurfaceState>((set) => ({
   axes: buildAxes(DEFAULT_RESOLUTION, "flat"),
   resolution: DEFAULT_RESOLUTION,
   meshSamples: DEFAULT_MESH_SAMPLES,
+  hovered: null,
 
   setHandle: (axis, i, j, value) =>
     set((state) => {
@@ -91,6 +97,8 @@ export const useSurfaceStore = create<SurfaceState>((set) => ({
     })),
 
   setMeshSamples: (n) => set({ meshSamples: n }),
+
+  setHovered: (cell) => set({ hovered: cell }),
 
   reset: () => set((state) => ({ axes: buildAxes(state.resolution, "flat") })),
 

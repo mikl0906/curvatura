@@ -30,7 +30,7 @@ export function SurfaceMesh({ axes, samples }: SurfaceMeshProps) {
   return (
     <mesh geometry={geometry}>
       <meshStandardMaterial
-        color="#6366f1"
+        color="#aaa"
         side={THREE.DoubleSide}
         roughness={0.45}
         metalness={0.1}

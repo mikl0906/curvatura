@@ -10,6 +10,8 @@ x(u, v),  y(u, v),  z(u, v)
 
 You shape each function by **dragging point handles up and down** on its own grid, and watch the resulting surface take form in a fourth canvas.
 
+[Web app](https://curvatura.fly.dev)
+
 ## How it works
 
 The interface has four canvases:
@@ -35,12 +37,12 @@ npm run dev      # start the dev server (opens the browser)
 
 ## Scripts
 
-| Command           | Description                                          |
-| ----------------- | ---------------------------------------------------- |
-| `npm run dev`     | Start the Vite dev server with hot reload            |
-| `npm run build`   | Type-check (`tsc -b`) and build for production       |
-| `npm run preview` | Preview the production build locally                 |
-| `npm run lint`    | Lint the codebase with ESLint                        |
+| Command           | Description                                    |
+| ----------------- | ---------------------------------------------- |
+| `npm run dev`     | Start the Vite dev server with hot reload      |
+| `npm run build`   | Type-check (`tsc -b`) and build for production |
+| `npm run preview` | Preview the production build locally           |
+| `npm run lint`    | Lint the codebase with ESLint                  |
 
 ## Project status
 

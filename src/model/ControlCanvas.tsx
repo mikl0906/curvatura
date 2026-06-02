@@ -56,7 +56,13 @@ export function ControlCanvas({ axis, color }: ControlCanvasProps) {
         far={100}
         position={[-4, -6, 3]}
       />
-      <OrbitControls makeDefault enablePan={false} minZoom={10} maxZoom={500} />
+      <OrbitControls
+        makeDefault
+        enablePan={false}
+        minZoom={10}
+        maxZoom={500}
+        dampingFactor={0.2}
+      />
       <GizmoHelper
         alignment="bottom-right" // widget alignment within scene
         margin={[80, 80]} // widget margins (X, Y)

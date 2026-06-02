@@ -27,14 +27,17 @@ type HandleProps = {
  */
 export function Handle({ axis, i, j, position, color }: HandleProps) {
   const setHandle = useSurfaceStore((s) => s.setHandle);
+  const setHovered = useSurfaceStore((s) => s.setHovered);
+  const highlighted = useSurfaceStore(
+    (s) => s.hovered?.i === i && s.hovered?.j === j,
+  );
   const startValue = useRef(position[2]);
-  const [hovered, setHovered] = useState(false);
   const [dragging, setDragging] = useState(false);
 
   return (
     <DragControls
       autoTransform={false}
-      onHover={(h) => setHovered(h)}
+      onHover={(h) => setHovered(h ? { i, j } : null)}
       onDragStart={() => {
         startValue.current = position[2];
         setDragging(true);
@@ -55,7 +58,7 @@ export function Handle({ axis, i, j, position, color }: HandleProps) {
         <meshStandardMaterial
           color={dragging ? "#ffffff" : color}
           emissive={color}
-          emissiveIntensity={hovered || dragging ? 0.7 : 0.2}
+          emissiveIntensity={highlighted || dragging ? 0.7 : 0.2}
         />
       </mesh>
     </DragControls>
