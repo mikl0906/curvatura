@@ -56,8 +56,6 @@ export function Handle({ axis, i, j, position, color }: HandleProps) {
           color={dragging ? "#ffffff" : color}
           emissive={color}
           emissiveIntensity={hovered || dragging ? 0.7 : 0.2}
-          roughness={0.35}
-          metalness={0.1}
         />
       </mesh>
     </DragControls>

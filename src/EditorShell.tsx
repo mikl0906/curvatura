@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { useState, type ReactNode } from "react";
-import { Check, Copy, Moon, RotateCcw, Sun } from "lucide-react";
+import { Check, Copy, Moon, RotateCcw, Shapes, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/theme-provider";
@@ -9,6 +9,15 @@ import { useSurfaceStore } from "@/surface-store";
 import { gridToLambdaString, surfaceToLambdaString } from "@/lambda-export";
 import { ControlCanvas } from "./model/ControlCanvas";
 import { ResultCanvas } from "./model/ResultCanvas";
+import { Slider } from "./components/ui/slider";
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "./components/ui/popover";
 
 // App-wide convention: Z is up on every canvas.
 THREE.Object3D.DEFAULT_UP.set(0, 0, 1);
@@ -44,7 +53,7 @@ function CopyButton({
     }
   };
   return (
-    <Button variant="outline" size="xs" onClick={onClick}>
+    <Button variant="outline" onClick={onClick}>
       {copied ? <Check /> : <Copy />}
       {copied ? "Copied!" : children}
     </Button>
@@ -64,8 +73,8 @@ function Panel({
 }) {
   return (
     <div className="relative flex flex-col overflow-hidden bg-background">
-      <div className="flex h-9 shrink-0 items-center justify-between border-b px-3">
-        <span className="flex items-center gap-2 text-sm font-medium">
+      <div className="flex shrink-0 items-center justify-between border-b p-2 h-12">
+        <span className="flex items-center gap-2 font-medium">
           {color && (
             <span
               className="size-2.5 rounded-full"
@@ -105,56 +114,79 @@ export function EditorShell() {
   const setResolution = useSurfaceStore((s) => s.setResolution);
   const loadPreset = useSurfaceStore((s) => s.loadPreset);
   const reset = useSurfaceStore((s) => s.reset);
+  const [presetsOpen, setPresetsOpen] = useState(false);
 
   return (
     <div className="flex h-screen flex-col bg-background text-foreground">
-      <header className="flex h-14 shrink-0 items-center gap-4 border-b px-4">
-        <h1 className="text-base font-semibold tracking-tight">Curvatura</h1>
-        <span className="hidden text-xs text-muted-foreground sm:inline">
-          Parametric surface builder
-        </span>
+      <header className="flex items-center justify-between border-b p-2">
+        <div className="flex justify-between items-center gap-2">
+          <h1 className="font-semibold tracking-tight">Curvatura</h1>
+          <span className="hidden text-sm text-muted-foreground sm:inline">
+            Parametric surface builder
+          </span>
 
-        <div className="ml-auto flex items-center gap-2">
-          <div className="hidden items-center gap-1 md:flex">
-            {PRESETS.map((p) => (
-              <Button
-                key={p.name}
-                variant="ghost"
-                size="xs"
-                onClick={() => loadPreset(p.name)}
-              >
-                {p.label}
-              </Button>
-            ))}
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={reset}>
+              <RotateCcw />
+              Reset
+            </Button>
+
+            <CopyButton
+              getText={() => surfaceToLambdaString(axes.x, axes.y, axes.z)}
+            >
+              Copy all
+            </CopyButton>
+
+            <label className="hidden items-center gap-2 text-muted-foreground lg:flex">
+              Handles
+              <Slider
+                min={3}
+                max={9}
+                step={1}
+                value={[resolution]}
+                onValueChange={(value) => setResolution(value[0])}
+                className="w-32"
+              />
+              <span className="w-8 tabular-nums">
+                {resolution}×{resolution}
+              </span>
+            </label>
+
+            <Popover open={presetsOpen} onOpenChange={setPresetsOpen}>
+              <PopoverTrigger asChild>
+                <Button variant="outline">
+                  <Shapes />
+                  Presets
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-56">
+                <PopoverHeader>
+                  <PopoverTitle>Presets</PopoverTitle>
+                  <PopoverDescription>
+                    Start from an example surface.
+                  </PopoverDescription>
+                </PopoverHeader>
+                <div className="grid grid-cols-2 gap-1">
+                  {PRESETS.map((p) => (
+                    <Button
+                      key={p.name}
+                      variant="ghost"
+                      className="justify-start"
+                      onClick={() => {
+                        loadPreset(p.name);
+                        setPresetsOpen(false);
+                      }}
+                    >
+                      {p.label}
+                    </Button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
+        </div>
 
-          <label className="hidden items-center gap-2 text-xs text-muted-foreground lg:flex">
-            Handles
-            <input
-              type="range"
-              min={3}
-              max={9}
-              step={1}
-              value={resolution}
-              onChange={(e) => setResolution(Number(e.target.value))}
-              className="accent-primary"
-            />
-            <span className="w-8 tabular-nums">
-              {resolution}×{resolution}
-            </span>
-          </label>
-
-          <Button variant="ghost" size="xs" onClick={reset}>
-            <RotateCcw />
-            Reset
-          </Button>
-
-          <CopyButton
-            getText={() => surfaceToLambdaString(axes.x, axes.y, axes.z)}
-          >
-            Copy all
-          </CopyButton>
-
+        <div>
           <ThemeToggle />
         </div>
       </header>

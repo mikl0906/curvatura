@@ -1,5 +1,10 @@
 import { Canvas } from "@react-three/fiber";
-import { Grid, OrbitControls } from "@react-three/drei";
+import {
+  GizmoHelper,
+  GizmoViewport,
+  OrbitControls,
+  OrthographicCamera,
+} from "@react-three/drei";
 import type { Axis } from "@/surface-store";
 import { useSurfaceStore } from "@/surface-store";
 import { HeightFieldMesh } from "./HeightFieldMesh";
@@ -41,25 +46,26 @@ export function ControlCanvas({ axis, color }: ControlCanvasProps) {
     <Canvas camera={{ position: [3, -3, 2.4], fov: 50 }} dpr={[1, 2]}>
       <ambientLight intensity={0.7} />
       <directionalLight position={[4, -2, 6]} intensity={1.1} />
-      <Grid
-        rotation={[Math.PI / 2, 0, 0]}
-        args={[4, 4]}
-        cellSize={0.25}
-        sectionSize={1}
-        cellColor="#3a3a47"
-        sectionColor="#52525b"
-        fadeDistance={14}
-        infiniteGrid={false}
-      />
-      <axesHelper args={[1.4]} />
+      <axesHelper args={[0.5]} />
       <HeightFieldMesh grid={grid} samples={samples} color={color} />
       {handles}
-      <OrbitControls
+      <OrthographicCamera
         makeDefault
-        enablePan={false}
-        minDistance={2}
-        maxDistance={12}
+        zoom={100}
+        near={0.1}
+        far={100}
+        position={[-4, -6, 3]}
       />
+      <OrbitControls makeDefault enablePan={false} minZoom={10} maxZoom={500} />
+      <GizmoHelper
+        alignment="bottom-right" // widget alignment within scene
+        margin={[80, 80]} // widget margins (X, Y)
+      >
+        <GizmoViewport
+          axisColors={["red", "green", "blue"]}
+          labelColor="white"
+        />
+      </GizmoHelper>
     </Canvas>
   );
 }

@@ -1,5 +1,11 @@
 import { Canvas } from "@react-three/fiber";
-import { Grid, OrbitControls } from "@react-three/drei";
+import {
+  GizmoHelper,
+  GizmoViewport,
+  Grid,
+  OrbitControls,
+  OrthographicCamera,
+} from "@react-three/drei";
 import { useSurfaceStore } from "@/surface-store";
 import { SurfaceMesh } from "./SurfaceMesh";
 
@@ -23,9 +29,25 @@ export function ResultCanvas() {
         fadeDistance={22}
         infiniteGrid={false}
       />
-      <axesHelper args={[1.6]} />
+      <axesHelper args={[0.5]} />
       <SurfaceMesh axes={axes} samples={samples} />
-      <OrbitControls makeDefault minDistance={2} maxDistance={16} />
+      <OrthographicCamera
+        makeDefault
+        zoom={100}
+        near={0.1}
+        far={100}
+        position={[-4, -6, 3]}
+      />
+      <OrbitControls makeDefault enablePan={false} minZoom={10} maxZoom={500} />
+      <GizmoHelper
+        alignment="bottom-right" // widget alignment within scene
+        margin={[80, 80]} // widget margins (X, Y)
+      >
+        <GizmoViewport
+          axisColors={["red", "green", "blue"]}
+          labelColor="white"
+        />
+      </GizmoHelper>
     </Canvas>
   );
 }

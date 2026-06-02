@@ -35,6 +35,7 @@ export function SurfaceMesh({ axes, samples }: SurfaceMeshProps) {
         roughness={0.45}
         metalness={0.1}
         flatShading={false}
+        wireframe={true}
       />
     </mesh>
   );
