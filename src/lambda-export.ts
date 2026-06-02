@@ -27,12 +27,22 @@ export function gridToLambdaString(grid: Grid): string {
   return `((g)=>{${HELPERS}return f(g);})(${serializeGrid(grid)})`;
 }
 
-/** The full surface: `(u, v) => [x, y, z]`. */
+/**
+ * The full surface as three ready-to-paste declarations sharing one helper
+ * preamble, so the result drops straight into a script:
+ *
+ *   const cr=…; const s1=…; const f=…;
+ *   const x = f([...]);
+ *   const y = f([...]);
+ *   const z = f([...]);
+ *
+ * Each of `x`, `y`, `z` is a standalone `(u, v) => number`.
+ */
 export function surfaceToLambdaString(gx: Grid, gy: Grid, gz: Grid): string {
   return (
-    `((gx,gy,gz)=>{${HELPERS}` +
-    `const fx=f(gx),fy=f(gy),fz=f(gz);` +
-    `return (u,v)=>[fx(u,v),fy(u,v),fz(u,v)];})` +
-    `(${serializeGrid(gx)},${serializeGrid(gy)},${serializeGrid(gz)})`
+    `${HELPERS}\n` +
+    `const x = f(${serializeGrid(gx)});\n` +
+    `const y = f(${serializeGrid(gy)});\n` +
+    `const z = f(${serializeGrid(gz)});`
   );
 }
